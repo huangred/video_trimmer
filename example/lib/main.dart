@@ -34,12 +34,13 @@ class HomePage extends StatelessWidget {
           child: ElevatedButton(
             child: Text("LOAD VIDEO"),
             onPressed: () async {
-              File file = await ImagePicker.pickVideo(
+              var file = await ImagePicker().getVideo(
                 source: ImageSource.gallery,
               );
               if (file != null) {
-                await _trimmer.loadVideo(videoFile: file);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                await _trimmer.loadVideo(videoFile: File(file.path));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
                   return TrimmerView(_trimmer);
                 }));
               }
@@ -77,7 +78,8 @@ class _TrimmerViewState extends State<TrimmerView> {
       startValue: _startValue,
       endValue: _endValue,
       onProgress: (progress) {
-        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=' + progress.toString());
+        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=' +
+            progress.toString());
       },
     )
         .then((value) {
@@ -160,7 +162,8 @@ class _TrimmerViewState extends State<TrimmerView> {
                           color: Colors.white,
                         ),
                   onPressed: () async {
-                    bool playbackState = await widget._trimmer.videPlaybackControl(
+                    bool playbackState =
+                        await widget._trimmer.videPlaybackControl(
                       startValue: _startValue,
                       endValue: _endValue,
                     );
